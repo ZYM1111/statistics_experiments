@@ -1,0 +1,1392 @@
+\documentclass[UTF8,a4paper]{ctexart}
+\usepackage{fontspec, xunicode, xltxtra}
+\setmainfont{Microsoft YaHei}
+\usepackage{ctex}
+\author{张逸敏}
+\date{\today}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{实验四-用R语言实现因子分析}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{ux6c34ux6ce5ux884cux4e1aux4e0aux5e02ux516cux53f8ux7ecfux8425ux4e1aux7ee9ux56e0ux5b50ux6a21ux578bux5b9eux8bc1ux5206ux6790}{%
+\section{水泥行业上市公司经营业绩因子模型实证分析}\label{ux6c34ux6ce5ux884cux4e1aux4e0aux5e02ux516cux53f8ux7ecfux8425ux4e1aux7ee9ux56e0ux5b50ux6a21ux578bux5b9eux8bc1ux5206ux6790}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Name: factpc}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Aliases: factpc}
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Keywords: \PYZti{}kwd1 \PYZti{}kwd2}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} ** Examples}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Should be DIRECTLY executable !! \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZhy{}\PYZhy{} ==\PYZgt{}  Define data, use random,}
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZhy{}\PYZhy{}    or do  help(data=index)  for the standard data sets.}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{} The function is currently defined as}
+\PY{n}{factpc}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{function}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{+w}{ }\PY{n}{m}\PY{o}{=}\PY{l+m}{2}\PY{p}{,}\PY{n}{rotation}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{none\PYZdq{}}\PY{p}{,}\PY{n}{scores}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{regression\PYZdq{}}\PY{p}{)}
+\PY{p}{\PYZob{}}\PY{+w}{  }
+\PY{+w}{   }\PY{n+nf}{options}\PY{p}{(}\PY{n}{digits}\PY{o}{=}\PY{l+m}{4}\PY{p}{)}
+\PY{+w}{   }\PY{n}{S}\PY{o}{=}\PY{n+nf}{cor}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{;}\PY{+w}{ }
+\PY{+w}{   }\PY{n}{p}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{S}\PY{p}{)}\PY{p}{;}\PY{+w}{ }\PY{n}{diag\PYZus{}S}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{diag}\PY{p}{(}\PY{n}{S}\PY{p}{)}\PY{p}{;}\PY{+w}{ }\PY{n}{sum\PYZus{}rank}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{sum}\PY{p}{(}\PY{n}{diag\PYZus{}S}\PY{p}{)}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}rowname\PYZlt{}\PYZhy{}paste(\PYZdq{}X\PYZdq{}, 1:p, sep=\PYZdq{}\PYZdq{})}
+\PY{+w}{   }\PY{n}{rowname}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{n+nf}{names}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+\PY{+w}{   }\PY{n}{colname}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{paste}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Factor\PYZdq{}}\PY{p}{,}\PY{+w}{ }\PY{l+m}{1}\PY{o}{:}\PY{n}{p}\PY{p}{,}\PY{+w}{ }\PY{n}{sep}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+\PY{+w}{   }\PY{n}{A}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{matrix}\PY{p}{(}\PY{l+m}{0}\PY{p}{,}\PY{+w}{ }\PY{n}{nrow}\PY{o}{=}\PY{n}{p}\PY{p}{,}\PY{+w}{ }\PY{n}{ncol}\PY{o}{=}\PY{n}{p}\PY{p}{,}\PY{+w}{ }\PY{n}{dimnames}\PY{o}{=}\PY{n+nf}{list}\PY{p}{(}\PY{n}{rowname}\PY{p}{,}\PY{+w}{ }\PY{n}{colname}\PY{p}{)}\PY{p}{)}
+\PY{+w}{   }\PY{n}{eig}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{eigen}\PY{p}{(}\PY{n}{S}\PY{p}{)}
+\PY{+w}{   }\PY{n+nf}{for }\PY{p}{(}\PY{n}{i}\PY{+w}{ }\PY{n}{in}\PY{+w}{ }\PY{l+m}{1}\PY{o}{:}\PY{n}{p}\PY{p}{)}
+\PY{+w}{      }\PY{n}{A}\PY{p}{[}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{sqrt}\PY{p}{(}\PY{n}{eig}\PY{o}{\PYZdl{}}\PY{n}{values}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{n}{eig}\PY{o}{\PYZdl{}}\PY{n}{vectors}\PY{p}{[}\PY{p}{,}\PY{n}{i}\PY{p}{]}
+\PY{+w}{   }\PY{n+nf}{for }\PY{p}{(}\PY{n}{i}\PY{+w}{ }\PY{n}{in}\PY{+w}{ }\PY{l+m}{1}\PY{o}{:}\PY{n}{p}\PY{p}{)}\PY{+w}{ }\PY{p}{\PYZob{}}\PY{+w}{ }\PY{n+nf}{if}\PY{p}{(}\PY{n+nf}{sum}\PY{p}{(}\PY{n}{A}\PY{p}{[}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZlt{}}\PY{l+m}{0}\PY{p}{)}\PY{+w}{ }\PY{n}{A}\PY{p}{[}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{o}{\PYZhy{}}\PY{n}{A}\PY{p}{[}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{+w}{ }\PY{p}{\PYZcb{}}
+\PY{+w}{   }\PY{n}{h}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{diag}\PY{p}{(}\PY{n}{A}\PY{o}{\PYZpc{}*\PYZpc{}}\PY{n+nf}{t}\PY{p}{(}\PY{n}{A}\PY{p}{)}\PY{p}{)}
+\PY{+w}{   }\PY{n}{rowname}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{c}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{SS loadings\PYZdq{}}\PY{p}{,}\PY{+w}{ }\PY{l+s}{\PYZdq{}}\PY{l+s}{Proportion Var\PYZdq{}}\PY{p}{,}\PY{+w}{ }\PY{l+s}{\PYZdq{}}\PY{l+s}{Cumulative Var\PYZdq{}}\PY{p}{)}
+\PY{+w}{   }\PY{n}{B}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{matrix}\PY{p}{(}\PY{l+m}{0}\PY{p}{,}\PY{+w}{ }\PY{n}{nrow}\PY{o}{=}\PY{l+m}{3}\PY{p}{,}\PY{+w}{ }\PY{n}{ncol}\PY{o}{=}\PY{n}{p}\PY{p}{,}\PY{+w}{ }\PY{n}{dimnames}\PY{o}{=}\PY{n+nf}{list}\PY{p}{(}\PY{n}{rowname}\PY{p}{,}\PY{+w}{ }\PY{n}{colname}\PY{p}{)}\PY{p}{)}
+\PY{+w}{   }\PY{n+nf}{for }\PY{p}{(}\PY{n}{i}\PY{+w}{ }\PY{n}{in}\PY{+w}{ }\PY{l+m}{1}\PY{o}{:}\PY{n}{p}\PY{p}{)}\PY{p}{\PYZob{}}
+\PY{+w}{     }\PY{n}{B}\PY{p}{[}\PY{l+m}{1}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{sum}\PY{p}{(}\PY{n}{A}\PY{p}{[}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZca{}}\PY{l+m}{2}\PY{p}{)}
+\PY{+w}{     }\PY{n}{B}\PY{p}{[}\PY{l+m}{2}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n}{B}\PY{p}{[}\PY{l+m}{1}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{o}{/}\PY{n}{sum\PYZus{}rank}
+\PY{+w}{     }\PY{n}{B}\PY{p}{[}\PY{l+m}{3}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{sum}\PY{p}{(}\PY{n}{B}\PY{p}{[}\PY{l+m}{1}\PY{p}{,}\PY{l+m}{1}\PY{o}{:}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{n}{sum\PYZus{}rank}
+\PY{+w}{   }\PY{p}{\PYZcb{}}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}cat(\PYZdq{}\PYZbs{}nFactor Analysis for Princomp: \PYZbs{}n\PYZbs{}n\PYZdq{});}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}cat(\PYZdq{}\PYZbs{}n\PYZdq{}); print(B[,1:m]);}
+\PY{+w}{   }\PY{n}{W}\PY{o}{=}\PY{n}{B}\PY{p}{[}\PY{l+m}{2}\PY{p}{,}\PY{l+m}{1}\PY{o}{:}\PY{n}{m}\PY{p}{]}\PY{o}{*}\PY{l+m}{100}\PY{p}{;}\PY{+w}{ }
+\PY{+w}{   }\PY{n}{Vars}\PY{o}{=}\PY{n+nf}{cbind}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{Vars\PYZsq{}}\PY{o}{=}\PY{n}{B}\PY{p}{[}\PY{l+m}{1}\PY{p}{,}\PY{p}{]}\PY{p}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{Vars.Prop\PYZsq{}}\PY{o}{=}\PY{n}{B}\PY{p}{[}\PY{l+m}{2}\PY{p}{,}\PY{p}{]}\PY{p}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{Vars.Cum\PYZsq{}}\PY{o}{=}\PY{n}{B}\PY{p}{[}\PY{l+m}{3}\PY{p}{,}\PY{p}{]}\PY{o}{*}\PY{l+m}{100}\PY{p}{)}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}cat(\PYZdq{}\PYZbs{}n\PYZdq{}); print(Vars[1:m,])}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}cat(\PYZdq{}\PYZbs{}n\PYZdq{}); print(A[,1:m]);}
+\PY{+w}{   }\PY{n}{A}\PY{o}{=}\PY{n}{A}\PY{p}{[}\PY{p}{,}\PY{l+m}{1}\PY{o}{:}\PY{n}{m}\PY{p}{]}\PY{+w}{ }
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}\PYZob{} cat(\PYZdq{}\PYZbs{}n common and specific \PYZbs{}n\PYZdq{}); print(cbind(common=h, spcific=diag\PYZus{}S\PYZhy{}h)); \PYZcb{}}
+\PY{+w}{   }\PY{n+nf}{if}\PY{p}{(}\PY{n}{rotation}\PY{o}{==}\PY{l+s}{\PYZdq{}}\PY{l+s}{varimax\PYZdq{}}\PY{p}{)}
+\PY{+w}{   }\PY{p}{\PYZob{}}\PY{+w}{   }
+\PY{+w}{       }\PY{c+c1}{\PYZsh{}stop(\PYZdq{} factor number \PYZgt{}= 2 !\PYZdq{})}
+\PY{+w}{       }\PY{n+nf}{cat}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZbs{}n Factor Analysis for Princomp in Varimax: \PYZbs{}n\PYZbs{}n\PYZdq{}}\PY{p}{)}\PY{p}{;}
+\PY{+w}{       }\PY{n}{VA}\PY{o}{=}\PY{n+nf}{varimax}\PY{p}{(}\PY{n}{A}\PY{p}{)}\PY{p}{;}\PY{+w}{ }\PY{n}{A}\PY{o}{=}\PY{n}{VA}\PY{o}{\PYZdl{}}\PY{n}{loadings}\PY{p}{;}\PY{+w}{ }
+\PY{+w}{       }\PY{n}{s2}\PY{o}{=}\PY{n+nf}{apply}\PY{p}{(}\PY{n}{A}\PY{o}{\PYZca{}}\PY{l+m}{2}\PY{p}{,}\PY{l+m}{2}\PY{p}{,}\PY{n}{sum}\PY{p}{)}\PY{p}{;}\PY{+w}{ }
+\PY{+w}{       }\PY{n}{k}\PY{o}{=}\PY{n+nf}{rank}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{s2}\PY{p}{)}\PY{p}{;}\PY{+w}{ }\PY{n}{s2}\PY{o}{=}\PY{n}{s2}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{p}{;}\PY{+w}{ }
+\PY{+w}{       }\PY{n}{W}\PY{o}{=}\PY{n}{s2}\PY{o}{/}\PY{n+nf}{sum}\PY{p}{(}\PY{n}{B}\PY{p}{[}\PY{l+m}{1}\PY{p}{,}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{l+m}{100}\PY{p}{;}\PY{+w}{ }
+\PY{+w}{       }\PY{n}{Vars}\PY{o}{=}\PY{n+nf}{cbind}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{Vars\PYZsq{}}\PY{o}{=}\PY{n}{s2}\PY{p}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{Vars.Prop\PYZsq{}}\PY{o}{=}\PY{n}{W}\PY{p}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{Vars.Cum\PYZsq{}}\PY{o}{=}\PY{n+nf}{cumsum}\PY{p}{(}\PY{n}{W}\PY{p}{)}\PY{p}{)}
+\PY{+w}{       }\PY{n+nf}{rownames}\PY{p}{(}\PY{n}{Vars}\PY{p}{)}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n+nf}{paste}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Factor\PYZdq{}}\PY{p}{,}\PY{+w}{ }\PY{l+m}{1}\PY{o}{:}\PY{n}{m}\PY{p}{,}\PY{+w}{ }\PY{n}{sep}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+\PY{+w}{       }\PY{c+c1}{\PYZsh{}print(Vars[1:m,])}
+\PY{+w}{       }\PY{n}{A}\PY{o}{=}\PY{n}{A}\PY{p}{[}\PY{p}{,}\PY{n}{k}\PY{p}{]}
+\PY{+w}{       }\PY{n+nf}{for }\PY{p}{(}\PY{n}{i}\PY{+w}{ }\PY{n}{in}\PY{+w}{ }\PY{l+m}{1}\PY{o}{:}\PY{n}{m}\PY{p}{)}\PY{+w}{ }\PY{p}{\PYZob{}}\PY{+w}{ }\PY{n+nf}{if}\PY{p}{(}\PY{n+nf}{sum}\PY{p}{(}\PY{n}{A}\PY{p}{[}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZlt{}}\PY{l+m}{0}\PY{p}{)}\PY{+w}{ }\PY{n}{A}\PY{p}{[}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{o}{\PYZhy{}}\PY{n}{A}\PY{p}{[}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{+w}{ }\PY{p}{\PYZcb{}}
+\PY{+w}{       }\PY{n}{A}\PY{o}{=}\PY{n}{A}\PY{p}{[}\PY{p}{,}\PY{l+m}{1}\PY{o}{:}\PY{n}{m}\PY{p}{]}\PY{p}{;}\PY{+w}{ }
+\PY{+w}{       }\PY{n+nf}{colnames}\PY{p}{(}\PY{n}{A}\PY{p}{)}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n+nf}{paste}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Factor\PYZdq{}}\PY{p}{,}\PY{+w}{ }\PY{l+m}{1}\PY{o}{:}\PY{n}{m}\PY{p}{,}\PY{+w}{ }\PY{n}{sep}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+\PY{+w}{       }\PY{c+c1}{\PYZsh{}cat(\PYZdq{}\PYZbs{}n\PYZdq{}); print(A) }
+\PY{+w}{   }\PY{p}{\PYZcb{}}
+\PY{+w}{   }\PY{n}{fit}\PY{o}{\PYZlt{}\PYZhy{}}\PY{k+kc}{NULL}
+\PY{+w}{   }\PY{n}{fit}\PY{o}{\PYZdl{}}\PY{n}{Vars}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n}{Vars}\PY{p}{[}\PY{l+m}{1}\PY{o}{:}\PY{n}{m}\PY{p}{,}\PY{p}{]}
+\PY{+w}{   }\PY{n}{fit}\PY{o}{\PYZdl{}}\PY{n}{loadings}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n}{A}
+\PY{+w}{   }\PY{n}{X}\PY{o}{=}\PY{n+nf}{as.matrix}\PY{p}{(}\PY{n+nf}{scale}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{p}{;}
+\PY{+w}{   }\PY{n}{PCs}\PY{o}{=}\PY{n}{X}\PY{o}{\PYZpc{}*\PYZpc{}}\PY{n+nf}{solve}\PY{p}{(}\PY{n}{S}\PY{p}{)}\PY{o}{\PYZpc{}*\PYZpc{}}\PY{n}{A}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}if(scores) cat(\PYZdq{}\PYZbs{}n\PYZdq{}); print(PCs)}
+\PY{+w}{   }\PY{n}{fit}\PY{o}{\PYZdl{}}\PY{n}{scores}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n}{PCs}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}if(rank)}
+\PY{+w}{   }\PY{p}{\PYZob{}}\PY{+w}{ }
+\PY{+w}{      }\PY{n}{W}\PY{o}{=}\PY{n}{W}\PY{o}{/}\PY{n+nf}{sum}\PY{p}{(}\PY{n}{W}\PY{p}{)}\PY{p}{;}
+\PY{+w}{      }\PY{n}{PC}\PY{o}{=}\PY{n}{PCs}\PY{o}{\PYZpc{}*\PYZpc{}}\PY{n}{W}\PY{p}{;}
+\PY{+w}{      }\PY{c+c1}{\PYZsh{}cat(\PYZdq{}\PYZbs{}n\PYZdq{}); print(cbind(PCs,\PYZsq{}PC\PYZsq{}=PC[,1],\PYZsq{}rank\PYZsq{}=rank(\PYZhy{}PC[,1])))}
+\PY{+w}{      }\PY{n}{Ri}\PY{o}{=}\PY{n+nf}{data.frame}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{F\PYZsq{}}\PY{o}{=}\PY{n}{PC}\PY{p}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{Ri\PYZsq{}}\PY{o}{=}\PY{n+nf}{rank}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{PC}\PY{p}{)}\PY{p}{)}
+\PY{+w}{      }\PY{n}{fit}\PY{o}{\PYZdl{}}\PY{n}{Rank}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n}{Ri}
+\PY{+w}{   }\PY{p}{\PYZcb{}}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}if(plot)}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}\PYZob{} plot(PCs);abline(h=0,v=0,lty=3); text(PCs,label=rownames(PCs),pos=1.1,adj=0.5,cex=0.85) \PYZcb{}}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}if(biplot)}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}\PYZob{} biplot(PCs,A) \PYZcb{} \PYZsh{}text(PCs,label=rownames(PCs),pos=1.1,adj=0.5,cex=0.85) }
+\PY{+w}{   }\PY{n}{common}\PY{o}{=}\PY{n+nf}{apply}\PY{p}{(}\PY{n}{A}\PY{o}{\PYZca{}}\PY{l+m}{2}\PY{p}{,}\PY{l+m}{1}\PY{p}{,}\PY{n}{sum}\PY{p}{)}\PY{p}{;}
+\PY{+w}{   }\PY{n}{fit}\PY{o}{\PYZdl{}}\PY{n}{common}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n}{common}
+\PY{+w}{   }\PY{n}{fit}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{}list(Vars=B[,1:m],loadings=A,scores=PCs,Ri=Ri,common=common)}
+\PY{p}{\PYZcb{}}\PY{+w}{ }\PY{c+c1}{\PYZsh{}fa=factpc(X,2)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{X}\PY{o}{=}\PY{n+nf}{read.table}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{d9\PYZus{}1.txt\PYZdq{}}\PY{p}{)}
+\PY{n+nf}{cor}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A matrix: 6 × 6 of type dbl
+\begin{tabular}{r|llllll}
+  & x1 & x2 & x3 & x4 & x5 & x6\\
+\hline
+	x1 &  1.00000000 &  0.9991983 & -0.09974689 &  0.18850763 &  0.2010041 &  0.29778271\\
+	x2 &  0.99919830 &  1.0000000 & -0.10420434 &  0.19672979 &  0.1903570 &  0.28747808\\
+	x3 & -0.09974689 & -0.1042043 &  1.00000000 & -0.83715637 & -0.4087603 &  0.01518741\\
+	x4 &  0.18850763 &  0.1967298 & -0.83715637 &  1.00000000 &  0.2585103 & -0.02928244\\
+	x5 &  0.20100410 &  0.1903570 & -0.40876032 &  0.25851029 &  1.0000000 &  0.58029333\\
+	x6 &  0.29778271 &  0.2874781 &  0.01518741 & -0.02928244 &  0.5802933 &  1.00000000\\
+\end{tabular}
+
+
+    
+    从上面的相关矩阵可以看出，主营业务利润率\(x_1\)与销售毛利率\(x_2\),呈高度正相关，速动比率\(x_3\)与资产负债率\(x_4\)呈较强的负相关，主营业务收入增长率\(x_5\)和营业利润增长率\(x_6\)呈中度相关。为了消除各财务指标之间的相关性，采用因子分析方法提取因子。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{FA0}\PY{o}{=}\PY{n+nf}{factanal}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{l+m}{3}\PY{p}{,}\PY{n}{rot}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{none\PYZdq{}}\PY{p}{)}
+\PY{n}{FA0}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Call:
+factanal(x = X, factors = 3, rotation = "none")
+
+Uniquenesses:
+   x1    x2    x3    x4    x5    x6 
+0.005 0.005 0.005 0.271 0.005 0.548 
+
+Loadings:
+   Factor1 Factor2 Factor3
+x1  0.950  -0.307         
+x2  0.948  -0.310         
+x3 -0.340  -0.782   0.517 
+x4  0.363   0.561  -0.531 
+x5  0.454   0.693   0.556 
+x6  0.383   0.163   0.527 
+
+               Factor1 Factor2 Factor3
+SS loadings      2.402   1.623   1.140
+Proportion Var   0.400   0.271   0.190
+Cumulative Var   0.400   0.671   0.861
+
+The degrees of freedom for the model is 0 and the fit was 1.1422 
+    \end{Verbatim}
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{p}{(}\PY{n}{Fac}\PY{o}{=}\PY{n+nf}{factpc}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{+w}{ }\PY{l+m}{3}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{description}
+\item[\$Vars] A matrix: 3 × 3 of type dbl
+\begin{tabular}{r|lll}
+  & Vars & Vars.Prop & Vars.Cum\\
+\hline
+	Factor1 & 2.570 & 0.4283 & 42.83\\
+	Factor2 & 1.713 & 0.2855 & 71.38\\
+	Factor3 & 1.249 & 0.2082 & 92.19\\
+\end{tabular}
+
+\item[\$loadings] A matrix: 6 × 3 of type dbl
+\begin{tabular}{r|lll}
+  & Factor1 & Factor2 & Factor3\\
+\hline
+	x1 &  0.7829 &  0.5029 & -0.3624\\
+	x2 &  0.7811 &  0.4964 & -0.3756\\
+	x3 & -0.5786 &  0.7685 &  0.0802\\
+	x4 &  0.5951 & -0.6990 & -0.2415\\
+	x5 &  0.6317 & -0.1457 &  0.6557\\
+	x6 &  0.5084 &  0.3367 &  0.6943\\
+\end{tabular}
+
+\item[\$scores] A matrix: 14 × 3 of type dbl
+\begin{tabular}{r|lll}
+  & Factor1 & Factor2 & Factor3\\
+\hline
+	冀东水泥 &  1.10805 &  0.19287 & -0.40233\\
+	大同水泥 & -1.07195 &  1.46385 & -0.37413\\
+	四川双马 & -0.58577 & -0.49848 &  0.24193\\
+	牡丹江 & -1.17442 & -0.77791 &  0.08986\\
+	西水股份 & -0.05264 & -0.46073 &  2.31615\\
+	狮头股份 & -1.05007 &  2.04151 &  0.25174\\
+	太行股份 &  0.20807 &  0.48809 & -0.23430\\
+	海螺水泥 &  2.20745 &  0.32524 &  1.16336\\
+	尖峰集团 & -1.11541 & -1.53235 &  0.39013\\
+	四川金顶 &  0.09714 & -0.60602 & -1.45691\\
+	祁连山 &  0.66096 &  1.03293 &  0.04173\\
+	华新水泥 &  0.41359 & -1.08331 &  0.19805\\
+	福建水泥 &  0.86840 & -0.53255 & -1.82104\\
+	天鹅股份 & -0.51340 & -0.05315 & -0.40422\\
+\end{tabular}
+
+\item[\$Rank] A data.frame: 14 × 2
+\begin{tabular}{r|ll}
+  & F & Ri\\
+  & <dbl> & <dbl>\\
+\hline
+	冀东水泥 &  0.48359 &  3\\
+	大同水泥 & -0.12910 &  8\\
+	四川双马 & -0.37184 & 11\\
+	牡丹江 & -0.76615 & 13\\
+	西水股份 &  0.35587 &  4\\
+	狮头股份 &  0.20127 &  5\\
+	太行股份 &  0.19490 &  6\\
+	海螺水泥 &  1.38882 &  1\\
+	尖峰集团 & -0.90457 & 14\\
+	四川金顶 & -0.47152 & 12\\
+	祁连山 &  0.63632 &  2\\
+	华新水泥 & -0.09863 &  7\\
+	福建水泥 & -0.17273 &  9\\
+	天鹅股份 & -0.34622 & 10\\
+\end{tabular}
+
+\item[\$common] \begin{description*}
+\item[x1] 0.997109324252413
+\item[x2] 0.997642639237266
+\item[x3] 0.931774724417496
+\item[x4] 0.901063767006764
+\item[x5] 0.85020719595189
+\item[x6] 0.853857171023583
+\end{description*}
+
+\end{description}
+
+
+    
+    由结果可以看出，前三个因子所解释的方差占整个方差的\(86\%\)以上，基本上能全面地反映六项财务指标的信息。所以我们提取前三个因子作为公共因子。但各因子的经济含义并不是很明显，还需进一步分析。从上面的结果可以看出，主因子法要比极大似然法的提取效果好些，因为极大似然法要求数据来自多元正态分布，这点一般是很难满足的。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{FA1}\PY{o}{=}\PY{n+nf}{factanal}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{l+m}{3}\PY{p}{,}\PY{n}{rot}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{varimax\PYZdq{}}\PY{p}{)}\PY{+w}{ }\PY{c+c1}{\PYZsh{} varimax法旋转因子分析}
+\PY{n}{FA1}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Call:
+factanal(x = X, factors = 3, rotation = "varimax")
+
+Uniquenesses:
+   x1    x2    x3    x4    x5    x6 
+0.005 0.005 0.005 0.271 0.005 0.548 
+
+Loadings:
+   Factor1 Factor2 Factor3
+x1  0.983           0.155 
+x2  0.985           0.142 
+x3         -0.990  -0.124 
+x4  0.127   0.844         
+x5          0.293   0.953 
+x6  0.210           0.631 
+
+               Factor1 Factor2 Factor3
+SS loadings      1.998   1.800   1.367
+Proportion Var   0.333   0.300   0.228
+Cumulative Var   0.333   0.633   0.861
+
+The degrees of freedom for the model is 0 and the fit was 1.1422 
+    \end{Verbatim}
+
+    
+    可以采用回归估计法、Bartlett估计法等估计方法计算样本的因子得分。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 使用回归估计法的极大似然法因子分析}
+\PY{n}{Fa1}\PY{o}{=}\PY{n+nf}{factanal}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{l+m}{3}\PY{p}{,}\PY{n}{scores}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{l+s}{\PYZdq{}}\PY{l+s}{regression\PYZdq{}}\PY{p}{)}
+\PY{n}{Fa1}\PY{o}{\PYZdl{}}\PY{n}{scores}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A matrix: 14 × 3 of type dbl
+\begin{tabular}{r|lll}
+  & Factor1 & Factor2 & Factor3\\
+\hline
+	冀东水泥 &  1.0571 &  0.49858 & -0.01932\\
+	大同水泥 &  0.2508 & -1.97182 & -0.55062\\
+	四川双马 & -0.7619 &  0.61936 & -0.35643\\
+	牡丹江 & -1.2622 &  0.10831 & -0.82490\\
+	西水股份 & -1.4124 & -0.36520 &  2.09840\\
+	狮头股份 &  0.2993 & -2.28407 &  0.06540\\
+	太行股份 &  0.5368 & -0.01725 & -0.16548\\
+	海螺水泥 &  1.1383 &  0.86089 &  1.85549\\
+	尖峰集团 & -1.7990 &  0.62143 & -0.20236\\
+	四川金顶 &  0.4397 &  0.83905 & -1.87521\\
+	祁连山 &  1.0220 & -0.27756 &  0.10237\\
+	华新水泥 & -0.4381 &  0.53317 &  0.26013\\
+	福建水泥 &  1.1144 &  0.91988 &  0.13561\\
+	天鹅股份 & -0.1847 & -0.08479 & -0.52308\\
+\end{tabular}
+
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{36}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 使用回归估计法的主成分法因子分析}
+\PY{n}{Fac1}\PY{o}{=}\PY{n+nf}{factpc}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{l+m}{3}\PY{p}{,}\PY{n}{scores}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{l+s}{\PYZdq{}}\PY{l+s}{regression\PYZdq{}}\PY{p}{)}
+\PY{n}{Fac1}\PY{o}{\PYZdl{}}\PY{n}{scores}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A matrix: 14 × 3 of type dbl
+\begin{tabular}{r|lll}
+  & Factor1 & Factor2 & Factor3\\
+\hline
+	冀东水泥 &  1.10805 &  0.19287 & -0.40233\\
+	大同水泥 & -1.07195 &  1.46385 & -0.37413\\
+	四川双马 & -0.58577 & -0.49848 &  0.24193\\
+	牡丹江 & -1.17442 & -0.77791 &  0.08986\\
+	西水股份 & -0.05264 & -0.46073 &  2.31615\\
+	狮头股份 & -1.05007 &  2.04151 &  0.25174\\
+	太行股份 &  0.20807 &  0.48809 & -0.23430\\
+	海螺水泥 &  2.20745 &  0.32524 &  1.16336\\
+	尖峰集团 & -1.11541 & -1.53235 &  0.39013\\
+	四川金顶 &  0.09714 & -0.60602 & -1.45691\\
+	祁连山 &  0.66096 &  1.03293 &  0.04173\\
+	华新水泥 &  0.41359 & -1.08331 &  0.19805\\
+	福建水泥 &  0.86840 & -0.53255 & -1.82104\\
+	天鹅股份 & -0.51340 & -0.05315 & -0.40422\\
+\end{tabular}
+
+
+    
+    水泥行业各上市公司的因子得分及排名如下：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{37}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{factanal.rank}\PY{p}{(}\PY{n}{Fa1}\PY{p}{,}\PY{n}{plot}\PY{o}{=}\PY{n+nb+bp}{T}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{description}
+\item[\$Fs] A matrix: 14 × 3 of type dbl
+\begin{tabular}{r|lll}
+  & Factor1 & Factor2 & Factor3\\
+\hline
+	冀东水泥 &  1.0571 &  0.49858 & -0.01932\\
+	大同水泥 &  0.2508 & -1.97182 & -0.55062\\
+	四川双马 & -0.7619 &  0.61936 & -0.35643\\
+	牡丹江 & -1.2622 &  0.10831 & -0.82490\\
+	西水股份 & -1.4124 & -0.36520 &  2.09840\\
+	狮头股份 &  0.2993 & -2.28407 &  0.06540\\
+	太行股份 &  0.5368 & -0.01725 & -0.16548\\
+	海螺水泥 &  1.1383 &  0.86089 &  1.85549\\
+	尖峰集团 & -1.7990 &  0.62143 & -0.20236\\
+	四川金顶 &  0.4397 &  0.83905 & -1.87521\\
+	祁连山 &  1.0220 & -0.27756 &  0.10237\\
+	华新水泥 & -0.4381 &  0.53317 &  0.26013\\
+	福建水泥 &  1.1144 &  0.91988 &  0.13561\\
+	天鹅股份 & -0.1847 & -0.08479 & -0.52308\\
+\end{tabular}
+
+\item[\$Ri] A data.frame: 14 × 2
+\begin{tabular}{r|ll}
+  & F & rank\\
+  & <dbl> & <dbl>\\
+\hline
+	冀东水泥 &  0.57762 &  3\\
+	大同水泥 & -0.73583 & 14\\
+	四川双马 & -0.17323 &  9\\
+	牡丹江 & -0.66886 & 13\\
+	西水股份 & -0.11846 &  8\\
+	狮头股份 & -0.66291 & 12\\
+	太行股份 &  0.15786 &  5\\
+	海螺水泥 &  1.23140 &  1\\
+	尖峰集团 & -0.53301 & 11\\
+	四川金顶 & -0.03369 &  7\\
+	祁连山 &  0.32578 &  4\\
+	华新水泥 &  0.08514 &  6\\
+	福建水泥 &  0.78759 &  2\\
+	天鹅股份 & -0.23942 & 10\\
+\end{tabular}
+
+\end{description}
+
+
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_12_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    结果分析:①从因子得分表可以看出，在盈利能力因子\(F_1\)上得分最高的四个公司依次是海螺水泥、福建水泥、冀东水泥和祁连山，这四家公司的得分远高于其他公司，这说明就盈利能力而言，这四家公司的盈利水平远高于其他公司，而盈利能力相对较弱的公司是尖峰集团、西水股份和牡丹江。
+
+②福建水泥、海螺水泥、四川金顶三家公司在因子\(F_2\)上的得分较高，说明在水泥行业中，这三家公司的偿债能力是较好的，而狮头股份和大同水泥这两家公司在因子\(F_2\)上的得分较低，则表明这两家的偿债能力相对较差，应着力提高。
+
+③在发展能力因子\(F_3\)上，西水股份、海螺水泥的得分远远高于其他公司，反映在现实情况中，这两只股票从2008年到现在是稳中有升的，这也要得益于它们良好的发展能力。同时也说明在水泥行业上市公司中，就发展能力而言，好的公司还是少数,很多公司不注重长远稳健的发展，而只注重短期利润。这一点需要引起有关企业的注意。四川金顶在因子\(F_3\)上的得分最低，说明它的发展能力最差，并且它的前两个因子得分也不高，在综合排名上也是靠后的，因此这家公司应从企业内部着手，进行整改，要从整体上提高公司的各项经营能力，达到提升公司经营业绩的目的。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{39}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{biplot}\PY{p}{(}\PY{n}{Fa1}\PY{o}{\PYZdl{}}\PY{n}{scores}\PY{p}{,}\PY{n}{Fa1}\PY{o}{\PYZdl{}}\PY{n}{loadings}\PY{p}{,}\PY{n}{main}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{l+s}{\PYZdq{}}\PY{l+s}{张逸敏\PYZdq{}}\PY{p}{)}\PY{+w}{ }\PY{c+c1}{\PYZsh{}前两个因子的信息重叠图}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_14_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{ux5bf931ux7701ux5e02ux81eaux6cbbux533aux7684ux4ebaux5747ux6d88ux8d39ux6c34ux5e73ux4f5cux5206ux6790ux8bc4ux4ef7}{%
+\section{对31省市自治区的人均消费水平作分析评价}\label{ux5bf931ux7701ux5e02ux81eaux6cbbux533aux7684ux4ebaux5747ux6d88ux8d39ux6c34ux5e73ux4f5cux5206ux6790ux8bc4ux4ef7}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Name: plot.text}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Aliases: plot.text}
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Keywords: \PYZti{}kwd1 \PYZti{}kwd2}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} ** Examples}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Should be DIRECTLY executable !! \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZhy{}\PYZhy{} ==\PYZgt{}  Define data, use random,}
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZhy{}\PYZhy{}    or do  help(data=index)  for the standard data sets.}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{} The function is currently defined as}
+\PY{n}{plot.text}\PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nf}{function}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{h}\PY{o}{=}\PY{l+m}{0}\PY{p}{,}\PY{n}{v}\PY{o}{=}\PY{l+m}{0}\PY{p}{)}
+\PY{p}{\PYZob{}}
+\PY{+w}{   }\PY{n+nf}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{main}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{张逸敏\PYZdq{}}\PY{p}{)}\PY{p}{;}\PY{n+nf}{abline}\PY{p}{(}\PY{n}{h}\PY{o}{=}\PY{n}{h}\PY{p}{,}\PY{n}{v}\PY{o}{=}\PY{n}{v}\PY{p}{,}\PY{n}{lty}\PY{o}{=}\PY{l+m}{3}\PY{p}{)}
+\PY{+w}{   }\PY{n+nf}{text}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{n+nf}{rownames}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{n}{pos}\PY{o}{=}\PY{l+m}{1.1}\PY{p}{,}\PY{n}{adj}\PY{o}{=}\PY{l+m}{0.5}\PY{p}{,}\PY{n}{cex}\PY{o}{=}\PY{l+m}{0.85}\PY{p}{)}\PY{+w}{ }
+\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{X}\PY{o}{=}\PY{n+nf}{read.table}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{d7\PYZus{}2.txt\PYZdq{}}\PY{p}{)}
+\PY{n}{Fac0}\PY{o}{=}\PY{n+nf}{factpc}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{l+m}{3}\PY{p}{)}
+\PY{n}{Fac0}\PY{o}{\PYZdl{}}\PY{n}{Vars}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A matrix: 3 × 3 of type dbl
+\begin{tabular}{r|lll}
+  & Vars & Vars.Prop & Vars.Cum\\
+\hline
+	Factor1 & 5.7012 & 0.71265 & 71.26\\
+	Factor2 & 1.0287 & 0.12858 & 84.12\\
+	Factor3 & 0.5043 & 0.06304 & 90.43\\
+\end{tabular}
+
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Fac1}\PY{o}{=}\PY{n+nf}{factpc}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{l+m}{3}\PY{p}{,}\PY{n}{rot}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{varimax\PYZdq{}}\PY{p}{)}\PY{+w}{ }\PY{c+c1}{\PYZsh{}旋转因子分析}
+\PY{n}{Fac1}\PY{o}{\PYZdl{}}\PY{n}{Vars}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+ Factor Analysis for Princomp in Varimax:
+
+    \end{Verbatim}
+
+    A matrix: 3 × 3 of type dbl
+\begin{tabular}{r|lll}
+  & Vars & Vars.Prop & Vars.Cum\\
+\hline
+	Factor1 & 4.016 & 50.20 & 50.20\\
+	Factor2 & 1.680 & 21.00 & 71.20\\
+	Factor3 & 1.538 & 19.22 & 90.43\\
+\end{tabular}
+
+
+    
+    由于公共因子在原始变量上的载荷值不太好解释，故对其进行因子旋转，选用方差最大化正交旋转，得到载荷矩阵如下所示
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Fac0}\PY{o}{\PYZdl{}}\PY{n}{loadings}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A matrix: 8 × 3 of type dbl
+\begin{tabular}{r|lll}
+  & Factor1 & Factor2 & Factor3\\
+\hline
+	X1 & 0.8429 & -0.43524 &  0.12432\\
+	X2 & 0.5956 &  0.68671 &  0.37005\\
+	X3 & 0.8926 & -0.09008 & -0.05094\\
+	X4 & 0.7202 &  0.47829 & -0.44596\\
+	X5 & 0.8979 & -0.32885 &  0.08740\\
+	X6 & 0.9647 & -0.07045 &  0.06403\\
+	X7 & 0.8858 & -0.05691 & -0.31385\\
+	X8 & 0.8939 &  0.12018 &  0.20046\\
+\end{tabular}
+
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{55}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Fac1}\PY{o}{\PYZdl{}}\PY{n}{loadings}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A matrix: 8 × 3 of type dbl
+\begin{tabular}{r|lll}
+  & Factor1 & Factor2 & Factor3\\
+\hline
+	X1 & 0.9463 & 0.1159 & 0.08084\\
+	X2 & 0.1527 & 0.2499 & 0.93676\\
+	X3 & 0.7580 & 0.4145 & 0.24728\\
+	X4 & 0.2249 & 0.8743 & 0.36250\\
+	X5 & 0.9231 & 0.2125 & 0.15722\\
+	X6 & 0.8252 & 0.3638 & 0.35547\\
+	X7 & 0.6864 & 0.6337 & 0.11656\\
+	X8 & 0.6843 & 0.2980 & 0.54462\\
+\end{tabular}
+
+
+    
+    由旋转后的因子载荷矩阵可以看出，公共因子\(F_1\)在\(X_1\)(人均食品支出)、\(X_3\)(人均家庭设备用品及服务支出)、\(X_5\)(人均交通和通信支出)、\(X_6\)(人均娱乐教育文化服务支出)、\(X_7\)(人均居住支出)、\(X_8\)(人均杂项商品和服务支出）上的载荷值都很大，可视为反映日常消费的公共因子。
+
+\(F_2\)在\(X_4\)(人均医疗保健支出）上的载荷值很大，可视为医疗因子。
+
+\(F_3\)仅在\(X_2\)(人均衣着商品支出）上有很大的载荷，可直接视为衣着因子。
+
+有了对各个公共因子合理的解释，结合各个省、市、自治区在三个公共因子上的得分和综合得分，就可以对各省、市、自治区的综合人均消费水平进行评价了。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{56}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Fac1}\PY{o}{\PYZdl{}}\PY{n}{scores}\PY{+w}{ }\PY{c+c1}{\PYZsh{}因子得分}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A matrix: 31 × 3 of type dbl
+\begin{tabular}{r|lll}
+  & Factor1 & Factor2 & Factor3\\
+\hline
+	北京 &  1.18092 &  1.74118 &  2.0290303\\
+	天津 &  0.20460 &  2.96179 & -0.7387309\\
+	河北 & -0.92649 &  1.20877 & -0.4632058\\
+	山西 & -0.78973 &  0.43269 & -0.0522166\\
+	内蒙古 & -0.62006 & -0.18964 &  2.1005492\\
+	辽宁 & -0.51315 &  1.07679 & -0.1140626\\
+	吉林 & -1.04765 &  1.15843 &  0.4542682\\
+	黑龙江 & -1.16020 &  0.29219 &  0.2627968\\
+	上海 &  3.25451 & -0.50217 &  1.4096665\\
+	江苏 &  0.60518 &  0.14247 & -0.2101378\\
+	浙江 &  1.38897 & -0.19508 &  1.4370242\\
+	安徽 & -0.15415 & -0.44702 & -0.3504643\\
+	福建 &  1.14760 & -0.30179 & -0.7812963\\
+	江西 & -0.08324 & -1.25789 & -0.1147615\\
+	山东 & -0.26270 &  0.28871 &  0.7222037\\
+	河南 & -0.75769 & -0.09266 &  0.3236384\\
+	湖北 & -0.18783 & -0.59587 &  0.0211735\\
+	湖南 & -0.24456 &  0.06551 &  0.0408756\\
+	广东 &  2.50339 &  0.69802 & -1.7414243\\
+	广西 &  0.01884 & -0.23030 & -1.5152172\\
+	海南 &  0.43204 & -0.14803 & -2.7440469\\
+	重庆 & -0.16768 &  0.43917 &  0.2490205\\
+	四川 &  0.05602 & -1.08548 & -0.0581755\\
+	贵州 & -0.11095 & -1.47558 & -0.1667687\\
+	云南 & -0.61547 & -0.42528 & -0.8159804\\
+	西藏 &  0.01200 & -2.46313 & -0.0009129\\
+	陕西 & -0.42416 &  0.17032 & -0.2713572\\
+	甘肃 & -0.45628 & -0.46636 &  0.0892125\\
+	青海 & -0.66054 & -0.42814 & -0.0065357\\
+	宁夏 & -0.78567 &  0.27927 & -0.1067207\\
+	新疆 & -0.83587 & -0.65089 &  1.1125557\\
+\end{tabular}
+
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{57}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Fac1}\PY{o}{\PYZdl{}}\PY{n}{Rank}\PY{+w}{ }\PY{c+c1}{\PYZsh{}排名}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A data.frame: 31 × 2
+\begin{tabular}{r|ll}
+  & F & Ri\\
+  & <dbl> & <dbl>\\
+\hline
+	北京 &  1.49132 &  2\\
+	天津 &  0.64435 &  5\\
+	河北 & -0.33214 & 18\\
+	山西 & -0.34907 & 20\\
+	内蒙古 &  0.05826 & 10\\
+	辽宁 & -0.05908 & 11\\
+	吉林 & -0.21606 & 13\\
+	黑龙江 & -0.52041 & 29\\
+	上海 &  1.98992 &  1\\
+	江苏 &  0.32440 &  7\\
+	浙江 &  1.03133 &  4\\
+	安徽 & -0.26389 & 17\\
+	福建 &  0.40095 &  6\\
+	江西 & -0.36273 & 21\\
+	山东 &  0.07473 &  8\\
+	河南 & -0.37337 & 23\\
+	湖北 & -0.23816 & 15\\
+	湖南 & -0.11187 & 12\\
+	广东 &  1.18174 &  3\\
+	广西 & -0.36514 & 22\\
+	海南 & -0.37786 & 24\\
+	重庆 &  0.06183 &  9\\
+	四川 & -0.23334 & 14\\
+	贵州 & -0.43972 & 27\\
+	云南 & -0.61393 & 31\\
+	西藏 & -0.56553 & 30\\
+	陕西 & -0.25362 & 16\\
+	甘肃 & -0.34266 & 19\\
+	青海 & -0.46754 & 28\\
+	宁夏 & -0.39403 & 26\\
+	新疆 & -0.37870 & 25\\
+\end{tabular}
+
+
+    
+    在日常消费因子\(F_1\)上得分最高的前五个省、市依次是上海、北京、广东、浙江、天津，且上海和广东明显高于其他，这就是说就日常消费而言，沿海地区相对要高些，且上海和广东的消费水平远远高于其他省、市、自治区；而吉林和黑龙江在这方面的消费相对较小些。
+
+天津、北京、河北、吉林和辽宁在因子\(F_2\)上的得分较高，可见该地区人们用于医疗保健方面的消费支出不小，西藏、贵州、江西和四川排到全国最末，这是符合实际情况的。
+
+就衣着因子而言，西藏、北京、山东、新疆、青海这5个省、市、自治区的得分最高，得分较低的是广东、海南、广西。这说明衣着因子受气候的影响最大，北部、西北部省、市、自治区的人们为了御寒，因此在这方面的支出较多。
+
+就综合得分来看，上海、北京、广东、浙江、天津这5个省、市的得分最高，河南、海南、江西省得分位于全国之末，故可知北京、上海、广东、浙江、天津这5个省、市的综合人均消费水平居于全国前列，云南、西藏和黑龙江的综合人均消费水平居于全国之末。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{58}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{plot.text}\PY{p}{(}\PY{n}{Fac1}\PY{o}{\PYZdl{}}\PY{n}{scores}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_26_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{59}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{biplot}\PY{p}{(}\PY{n}{Fac1}\PY{o}{\PYZdl{}}\PY{n}{scores}\PY{p}{,}\PY{n}{Fac1}\PY{o}{\PYZdl{}}\PY{n}{loadings}\PY{p}{,}\PY{n}{main}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{l+s}{\PYZdq{}}\PY{l+s}{张逸敏\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_27_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    从双重信息图上我们看到，各个变量在广东、上海、北京、天津这些地区的反应强烈，说明这些地区在各个指标消费都较高，广东人明显在变量\(X_5\)(人均交通和通信支出）上花的钱多于其他地区，而北京在变量\(X_7\)(人均居住支出）上花的钱较多。
+
+    \hypertarget{ux56e0ux5b50ux5206ux6790ux5728ux4e0aux5e02ux516cux53f8ux7ecfux8425ux4e1aux7ee9ux8bc4ux4ef7ux4e2dux7684ux5e94ux7528}{%
+\section{因子分析在上市公司经营业绩评价中的应用}\label{ux56e0ux5b50ux5206ux6790ux5728ux4e0aux5e02ux516cux53f8ux7ecfux8425ux4e1aux7ee9ux8bc4ux4ef7ux4e2dux7684ux5e94ux7528}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 自编函数}
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Name: factanal.rank}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Aliases: factanal.rank}
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Keywords: \PYZti{}kwd1 \PYZti{}kwd2}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} ** Examples}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Should be DIRECTLY executable !! \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{}\PYZsh{} \PYZhy{}\PYZhy{} ==\PYZgt{}  Define data, use random,}
+\PY{c+c1}{\PYZsh{}\PYZsh{} \PYZhy{}\PYZhy{}    or do  help(data=index)  for the standard data sets.}
+
+\PY{c+c1}{\PYZsh{}\PYZsh{} The function is currently defined as}
+\PY{n}{factanal.rank}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n+nf}{function}\PY{p}{(}\PY{n}{Fac}\PY{p}{,}\PY{+w}{ }\PY{n}{plot}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{n+nb+bp}{F}\PY{p}{)}\PY{+w}{ }\PY{p}{\PYZob{}}
+\PY{+w}{   }\PY{n}{Fs}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n}{Fac}\PY{o}{\PYZdl{}}\PY{n}{scores}
+\PY{+w}{   }\PY{n}{W}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n+nf}{apply}\PY{p}{(}\PY{n}{Fac}\PY{o}{\PYZdl{}}\PY{n}{loadings}\PY{o}{\PYZca{}}\PY{l+m}{2}\PY{p}{,}\PY{+w}{ }\PY{l+m}{2}\PY{p}{,}\PY{+w}{ }\PY{n}{sum}\PY{p}{)}
+\PY{+w}{   }\PY{n}{Wi}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n}{W}\PY{+w}{ }\PY{o}{/}\PY{+w}{ }\PY{n+nf}{sum}\PY{p}{(}\PY{n}{W}\PY{p}{)}
+\PY{+w}{   }\PY{n+nb+bp}{F}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n}{Fs}\PY{+w}{ }\PY{o}{\PYZpc{}*\PYZpc{}}\PY{+w}{ }\PY{n}{Wi}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{} cat(\PYZdq{}\PYZbs{}n\PYZdq{}); print(cbind(\PYZsq{}F\PYZsq{}=F[,1],\PYZsq{}rank\PYZsq{}=rank(\PYZhy{}F[,1])))}
+\PY{+w}{   }\PY{n}{Ri}\PY{+w}{ }\PY{o}{\PYZlt{}\PYZhy{}}\PY{+w}{ }\PY{n+nf}{data.frame}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{F\PYZdq{}}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{n+nb+bp}{F}\PY{p}{,}\PY{+w}{ }\PY{l+s}{\PYZdq{}}\PY{l+s}{rank\PYZdq{}}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{n+nf}{rank}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n+nb+bp}{F}\PY{p}{)}\PY{p}{)}
+\PY{+w}{   }\PY{n+nf}{if }\PY{p}{(}\PY{n}{plot}\PY{p}{)}\PY{+w}{ }\PY{p}{\PYZob{}}
+\PY{+w}{      }\PY{n+nf}{plot}\PY{p}{(}\PY{n}{Fs}\PY{p}{,}\PY{n}{main}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{张逸敏\PYZdq{}}\PY{p}{)}
+\PY{+w}{      }\PY{n+nf}{abline}\PY{p}{(}\PY{n}{h}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{l+m}{0}\PY{p}{,}\PY{+w}{ }\PY{n}{v}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{l+m}{0}\PY{p}{,}\PY{+w}{ }\PY{n}{lty}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{l+m}{3}\PY{p}{)}
+\PY{+w}{      }\PY{n+nf}{text}\PY{p}{(}\PY{n}{Fs}\PY{p}{,}\PY{+w}{ }\PY{n}{label}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{n+nf}{rownames}\PY{p}{(}\PY{n}{Fs}\PY{p}{)}\PY{p}{,}\PY{+w}{ }\PY{n}{pos}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{l+m}{1.1}\PY{p}{,}\PY{+w}{ }\PY{n}{adj}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{l+m}{0.5}\PY{p}{,}\PY{+w}{ }\PY{n}{cex}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{l+m}{0.85}\PY{p}{)}
+\PY{+w}{   }\PY{p}{\PYZcb{}}
+\PY{+w}{   }\PY{c+c1}{\PYZsh{} common=apply(Fac\PYZdl{}loadings\PYZca{}2,1,sum);}
+\PY{+w}{   }\PY{n+nf}{list}\PY{p}{(}\PY{n}{Fs}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{n}{Fs}\PY{p}{,}\PY{+w}{ }\PY{n}{Ri}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{n}{Ri}\PY{p}{)}
+\PY{p}{\PYZcb{}}\PY{+w}{ }\PY{c+c1}{\PYZsh{} Fac=factanal(X,2,rot=\PYZdq{}varimax\PYZdq{},scores=\PYZdq{}regression\PYZdq{})}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Case9}\PY{o}{=}\PY{n+nf}{read.table}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{case9.txt\PYZsq{}}\PY{p}{)}
+\PY{n}{Case9}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A data.frame: 28 × 11
+\begin{tabular}{r|lllllllllll}
+  & X1 & X2 & X3 & X4 & X5 & X6 & X7 & X8 & X9 & X10 & X11\\
+  & <dbl> & <dbl> & <dbl> & <dbl> & <dbl> & <dbl> & <dbl> & <dbl> & <dbl> & <dbl> & <dbl>\\
+\hline
+	上海医药 &  0.330 &  3.65 &  8.93 &  0.2120 &  1.13 & 0.78 & 10.33 & 10.16 & 6.91 & 9.17 & 1.69\\
+	昆明制药 &  0.720 &  6.11 & 11.73 &  0.7124 &  2.23 & 1.92 & 55.37 & 54.63 & 3.19 & 3.61 & 0.78\\
+	片仔癀 &  0.430 &  3.88 & 11.14 &  0.4251 & 11.70 & 9.01 & 67.03 & 66.12 & 0.66 & 2.82 & 0.46\\
+	同仁堂 &  0.722 &  4.93 & 14.64 &  0.6954 &  2.54 & 1.08 & 47.38 & 46.14 & 1.15 & 2.92 & 0.83\\
+	天士力 &  0.500 &  3.91 & 12.67 &  0.4945 &  2.18 & 2.02 & 72.41 & 71.07 & 4.60 & 2.38 & 0.70\\
+	复星实业 &  0.648 &  4.34 & 14.94 &  0.6500 &  1.11 & 0.89 & 26.04 & 25.55 & 5.45 & 2.86 & 0.54\\
+	康美药业 &  0.723 &  6.25 & 11.57 &  0.7160 &  1.11 & 0.73 & 27.80 & 27.33 & 3.38 & 1.41 & 0.70\\
+	江中药业 &  0.350 &  4.12 &  8.42 &  0.3542 &  1.48 & 1.22 & 59.52 & 58.74 & 4.96 & 2.57 & 1.09\\
+	联环药业 &  0.187 &  4.09 &  4.58 &  0.1935 &  5.39 & 4.81 & 41.73 & 41.36 & 3.55 & 3.72 & 0.54\\
+	交大昂立 &  0.290 &  4.78 &  5.96 &  0.1457 &  2.08 & 1.82 & 49.87 & 47.37 & 2.02 & 4.17 & 0.43\\
+	双鹤药业 &  0.296 &  3.52 &  8.41 &  0.3000 &  1.16 & 0.87 & 26.98 & 26.49 & 3.52 & 2.51 & 0.79\\
+	亚宝药业 &  0.220 &  2.58 &  8.41 &  0.2208 &  1.48 & 1.21 & 45.64 & 44.83 & 3.71 & 2.34 & 0.67\\
+	东盛科技 &  0.210 &  2.15 &  9.61 &  0.2364 &  1.10 & 1.05 & 72.76 & 71.30 & 4.64 & 1.84 & 0.43\\
+	金宇集团 &  0.404 &  5.20 &  7.78 &  0.3997 &  1.96 & 0.76 & 39.31 & 38.15 & 0.66 & 1.65 & 0.38\\
+	太极集团 &  0.226 &  3.53 &  6.41 &  0.1597 &  0.72 & 0.47 & 27.71 & 27.19 & 4.48 & 2.11 & 0.90\\
+	美罗药业 &  0.120 &  4.81 &  2.43 &  0.1015 &  1.64 & 1.38 & 20.65 & 20.25 & 5.03 & 3.16 & 0.74\\
+	天药股份 &  0.358 &  3.53 & 10.14 &  0.3045 &  1.42 & 1.02 & 26.29 & 25.72 & 2.00 & 1.40 & 0.44\\
+	中新药业 &  0.230 &  4.31 &  5.42 &  0.1314 &  0.92 & 0.59 & 42.44 & 41.76 & 2.21 & 1.84 & 0.61\\
+	星湖科技 &  0.220 &  2.77 &  7.92 &  0.2163 &  2.65 & 1.90 & 34.25 & 33.58 & 2.54 & 1.27 & 0.50\\
+	天坛生物 &  0.199 &  2.76 &  7.22 &  0.2002 &  2.87 & 2.01 & 50.01 & 49.36 & 0.96 & 1.03 & 0.39\\
+	钱江生化 &  0.161 &  3.29 &  4.89 &  0.1295 &  1.75 & 1.44 & 24.54 & 24.40 & 2.92 & 1.74 & 0.43\\
+	迪康药业 &  0.100 &  5.21 &  1.93 &  0.0586 &  2.73 & 2.51 & 47.52 & 46.86 & 2.71 & 0.58 & 0.19\\
+	金花股份 &  0.062 &  3.75 &  1.65 &  0.0662 &  1.23 & 1.09 & 18.31 & 17.96 & 9.21 & 0.75 & 0.38\\
+	鲁抗医药 &  0.130 &  3.92 &  3.35 &  0.1580 &  1.17 & 0.82 & 26.18 & 25.52 & 3.18 & 0.58 & 0.38\\
+	通化东宝 &  0.110 &  4.19 &  2.66 &  0.1076 &  2.30 & 1.93 & 49.40 & 48.80 & 1.36 & 0.43 & 0.18\\
+	天目药业 & -0.127 &  1.89 & -5.48 & -0.1113 &  2.21 & 1.76 & 38.55 & 37.71 & 2.84 & 1.70 & 0.55\\
+	ST三普 & -0.061 &  1.01 & -5.96 & -0.0606 &  0.81 & 0.64 & 36.70 & 36.02 & 1.95 & 1.30 & 0.33\\
+	ST金泰 & -0.540 & -0.22 &  0.41 & -0.2675 &  0.45 & 0.21 & 26.53 & 26.02 & 0.12 & 0.14 & 0.04\\
+\end{tabular}
+
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{FA0}\PY{o}{=}\PY{n+nf}{factanal}\PY{p}{(}\PY{n}{Case9}\PY{p}{,}\PY{l+m}{4}\PY{p}{,}\PY{n}{rotation}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{none\PYZdq{}}\PY{p}{)}\PY{+w}{ }\PY{c+c1}{\PYZsh{}因子不旋转  }
+\PY{n}{FA0}
+\PY{n+nf}{pairs}\PY{p}{(}\PY{n}{FA0}\PY{o}{\PYZdl{}}\PY{n}{loadings}\PY{p}{,}\PY{n}{main}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{张逸敏\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Call:
+factanal(x = Case9, factors = 4, rotation = "none")
+
+Uniquenesses:
+   X1    X2    X3    X4    X5    X6    X7    X8    X9   X10   X11 
+0.034 0.471 0.232 0.014 0.005 0.021 0.005 0.005 0.679 0.139 0.161 
+
+Loadings:
+    Factor1 Factor2 Factor3 Factor4
+X1   0.933   0.305                 
+X2   0.707   0.154                 
+X3   0.813   0.320                 
+X4   0.932   0.329                 
+X5           0.699           0.711 
+X6           0.706           0.689 
+X7           0.942          -0.323 
+X8           0.944          -0.318 
+X9   0.221  -0.331   0.397         
+X10  0.381           0.820   0.203 
+X11  0.513  -0.139   0.746         
+
+               Factor1 Factor2 Factor3 Factor4
+SS loadings      3.371   3.225   1.398   1.244
+Proportion Var   0.306   0.293   0.127   0.113
+Cumulative Var   0.306   0.600   0.727   0.840
+
+Test of the hypothesis that 4 factors are sufficient.
+The chi square statistic is 76.41 on 17 degrees of freedom.
+The p-value is 1.65e-09 
+    \end{Verbatim}
+
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_32_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{FA1}\PY{o}{=}\PY{n+nf}{factanal}\PY{p}{(}\PY{n}{Case9}\PY{p}{,}\PY{l+m}{4}\PY{p}{,}\PY{n}{rot}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{varimax\PYZdq{}}\PY{p}{)}\PY{+w}{ }\PY{c+c1}{\PYZsh{}varimax法旋转}
+\PY{n}{FA1}
+\PY{n+nf}{pairs}\PY{p}{(}\PY{n}{FA1}\PY{o}{\PYZdl{}}\PY{n}{loadings}\PY{p}{,}\PY{n}{main}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{张逸敏\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Call:
+factanal(x = Case9, factors = 4, rotation = "varimax")
+
+Uniquenesses:
+   X1    X2    X3    X4    X5    X6    X7    X8    X9   X10   X11 
+0.034 0.471 0.232 0.014 0.005 0.021 0.005 0.005 0.679 0.139 0.161 
+
+Loadings:
+    Factor1 Factor2 Factor3 Factor4
+X1   0.950           0.123   0.212 
+X2   0.713                   0.117 
+X3   0.838           0.166   0.188 
+X4   0.978           0.132   0.101 
+X5   0.119   0.969   0.197         
+X6           0.960   0.229         
+X7   0.145   0.224   0.952  -0.144 
+X8   0.145   0.229   0.950  -0.145 
+X9          -0.235  -0.198   0.472 
+X10  0.179   0.152           0.896 
+X11  0.304                   0.857 
+
+               Factor1 Factor2 Factor3 Factor4
+SS loadings      3.258   2.061   2.008   1.911
+Proportion Var   0.296   0.187   0.183   0.174
+Cumulative Var   0.296   0.484   0.666   0.840
+
+Test of the hypothesis that 4 factors are sufficient.
+The chi square statistic is 76.41 on 17 degrees of freedom.
+The p-value is 1.65e-09 
+    \end{Verbatim}
+
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{FA2}\PY{o}{=}\PY{n+nf}{factanal}\PY{p}{(}\PY{n}{Case9}\PY{p}{,}\PY{l+m}{4}\PY{p}{,}\PY{n}{rot}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{varimax\PYZdq{}}\PY{p}{,}\PY{n}{scores}\PY{+w}{ }\PY{o}{=}\PY{+w}{ }\PY{l+s}{\PYZdq{}}\PY{l+s}{reg\PYZdq{}}\PY{p}{)}
+\PY{n}{FA2}
+\PY{n+nf}{factanal.rank}\PY{p}{(}\PY{n}{FA2}\PY{p}{,}\PY{n}{plot}\PY{o}{=}\PY{n+nb+bp}{T}\PY{p}{)}
+\PY{n+nf}{biplot}\PY{p}{(}\PY{n}{FA2}\PY{o}{\PYZdl{}}\PY{n}{scores}\PY{p}{,}\PY{n}{FA2}\PY{o}{\PYZdl{}}\PY{n}{loadings}\PY{p}{,}\PY{n}{main}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{张逸敏\PYZdq{}}\PY{p}{)}\PY{+w}{ }\PY{c+c1}{\PYZsh{}前2个因子信息重叠图}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Call:
+factanal(x = Case9, factors = 4, scores = "reg", rotation = "varimax")
+
+Uniquenesses:
+   X1    X2    X3    X4    X5    X6    X7    X8    X9   X10   X11 
+0.034 0.471 0.232 0.014 0.005 0.021 0.005 0.005 0.679 0.139 0.161 
+
+Loadings:
+    Factor1 Factor2 Factor3 Factor4
+X1   0.950           0.123   0.212 
+X2   0.713                   0.117 
+X3   0.838           0.166   0.188 
+X4   0.978           0.132   0.101 
+X5   0.119   0.969   0.197         
+X6           0.960   0.229         
+X7   0.145   0.224   0.952  -0.144 
+X8   0.145   0.229   0.950  -0.145 
+X9          -0.235  -0.198   0.472 
+X10  0.179   0.152           0.896 
+X11  0.304                   0.857 
+
+               Factor1 Factor2 Factor3 Factor4
+SS loadings      3.258   2.061   2.008   1.911
+Proportion Var   0.296   0.187   0.183   0.174
+Cumulative Var   0.296   0.484   0.666   0.840
+
+Test of the hypothesis that 4 factors are sufficient.
+The chi square statistic is 76.41 on 17 degrees of freedom.
+The p-value is 1.65e-09 
+    \end{Verbatim}
+
+    
+    \begin{description}
+\item[\$Fs] A matrix: 28 × 4 of type dbl
+\begin{tabular}{r|llll}
+  & Factor1 & Factor2 & Factor3 & Factor4\\
+\hline
+	上海医药 & -0.38518626 &  0.04613094 & -1.24733636 &  3.93721529\\
+	昆明制药 &  1.71680536 & -0.27518683 &  0.88288661 &  0.37875758\\
+	片仔癀 &  0.48660099 &  4.43794736 &  0.60313696 & -0.29474820\\
+	同仁堂 &  1.81318006 & -0.14942738 &  0.25537445 &  0.07634029\\
+	天士力 &  0.70659547 & -0.44578951 &  2.14645042 &  0.25163994\\
+	复星实业 &  1.80684006 & -0.47774031 & -1.07167379 & -0.22125188\\
+	康美药业 &  2.13679913 & -0.56399535 & -1.04798943 & -0.62156382\\
+	江中药业 &  0.12677693 & -0.58965566 &  1.54856364 &  0.92279360\\
+	联环药业 & -0.37520027 &  1.75742959 & -0.14239324 &  0.47063184\\
+	交大昂立 & -0.45733006 & -0.06389830 &  0.78916821 &  0.66263607\\
+	双鹤药业 &  0.27089780 & -0.33147317 & -0.73364495 &  0.30500569\\
+	亚宝药业 & -0.20955173 & -0.38058879 &  0.55067342 &  0.28325155\\
+	东盛科技 & -0.34743964 & -0.93612645 &  2.39700640 & -0.03734281\\
+	金宇集团 &  0.76010546 & -0.24907811 & -0.20935137 & -0.74664365\\
+	太极集团 & -0.26680608 & -0.52349200 & -0.52459019 &  0.54534602\\
+	美罗药业 & -0.53383224 &  0.09836827 & -1.07287783 &  0.64429758\\
+	天药股份 &  0.50085672 & -0.23816367 & -0.97132810 & -0.57921634\\
+	中新药业 & -0.40332204 & -0.63095766 &  0.40695735 &  0.10488034\\
+	星湖科技 & -0.01686874 &  0.31220161 & -0.49063504 & -0.45381879\\
+	天坛生物 & -0.19590014 &  0.20420163 &  0.55960573 & -0.63677083\\
+	钱江生化 & -0.29429098 &  0.04623695 & -0.97812447 & -0.31073622\\
+	迪康药业 & -0.68528498 &  0.27824180 &  0.42145274 & -0.84486959\\
+	金花股份 & -0.51014439 & -0.11621635 & -1.35282818 & -0.52107928\\
+	鲁抗医药 & -0.16710714 & -0.31708586 & -0.89962078 & -0.81820721\\
+	通化东宝 & -0.51865606 & -0.01650524 &  0.56582550 & -1.00840406\\
+	天目药业 & -1.56825026 &  0.19857213 &  0.12715069 &  0.09810037\\
+	ST三普 & -1.26473470 & -0.53187115 &  0.06585733 & -0.39121842\\
+	ST金泰 & -2.12555224 & -0.54207849 & -0.57771572 & -1.19502506\\
+\end{tabular}
+
+\item[\$Ri] A data.frame: 28 × 2
+\begin{tabular}{r|ll}
+  & F & rank\\
+  & <dbl> & <dbl>\\
+\hline
+	上海医药 &  0.41791141 &  6\\
+	昆明制药 &  0.81435018 &  2\\
+	片仔癀 &  1.23183621 &  1\\
+	同仁堂 &  0.67747029 &  3\\
+	天士力 &  0.66826813 &  4\\
+	复星实业 &  0.25203944 &  9\\
+	康美药业 &  0.27150403 &  8\\
+	江中药业 &  0.44058803 &  5\\
+	联环药业 &  0.32617385 &  7\\
+	交大昂立 &  0.13302219 & 11\\
+	双鹤药业 & -0.07473390 & 15\\
+	亚宝药业 &  0.01944565 & 12\\
+	东盛科技 &  0.18177141 & 10\\
+	金宇集团 &  0.01256291 & 13\\
+	太极集团 & -0.21207360 & 19\\
+	美罗药业 & -0.26619358 & 21\\
+	天药股份 & -0.20738822 & 18\\
+	中新药业 & -0.17288890 & 17\\
+	星湖科技 & -0.13680305 & 16\\
+	天坛生物 & -0.03366507 & 14\\
+	钱江生化 & -0.37032427 & 23\\
+	迪康药业 & -0.26282911 & 20\\
+	金花股份 & -0.60764373 & 26\\
+	鲁抗医药 & -0.49445073 & 25\\
+	通化东宝 & -0.27227562 & 22\\
+	天目药业 & -0.46090275 & 24\\
+	ST三普 & -0.63136561 & 27\\
+	ST金泰 & -1.24340558 & 28\\
+\end{tabular}
+
+\end{description}
+
+
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_34_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_34_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    从方差贡献表中可以看到，前四个因子的累计方差贡献率达到\(84\%\)，所以只需要取前4个因子就可以较好地概括出原始指标。
+
+由旋转后的因子载荷矩阵可以看出，因子\(F_1\)在每股收益\(X_1\)、每股净资产\(X_3\)、净资产收益率\(X_4\)、扣除后每股收益\(X_4\)上的载荷量较大，分别反映上市公司给予其股东的回报，在这个因子上得分越高，则公司能够给予股东的回报一般而言也越高。
+
+因子\(F_2\),由于在存货周转率\(X_5\)、固定资产周转率\(X_6\)上有较大的载荷量,所以是反映公司的资产管理能力的综合指标。
+
+第三个因子\(F_3\),在总资产周转率\(X_7\)、主营业务利润率\(X_8\)上的载荷量较大,主要体现了公司的短期偿债能力，是债权人非常关心的项目。
+
+第四个因子\(F_4\),在销售毛利率\(X_9\)、流动比率\(X_{10}\)、速动比率\(X_{11}\)上的载荷较大，是反映公司的盈利能力的公共因子。从R给出的成分图可以更清晰地看到各个原始指标之间的关系。
+
+    从因子排名表可以看到，在资产管理能力方面，片仔癀可谓一枝独秀。这与该公司独家生产和拥有400余年历史的名贵中药片仔癀不无关系。由于其独特的地位，所以漳州片仔癀集团公司的现金流相当充足。另外，片仔癀拥有的片仔癀配方属于国家秘密，因此在上市时没有进行资产评估，片仔癀的无形资产包括品牌、商标、技术、专利、药品批文等，都没有作评估就无偿进入股份公司，致使其在无形资产方面没有显示出应有的数据。这两方面的原因使得片仔癀在着重考察流动资产质量的短期偿债能力指标方面有着极为优秀的表现。
+
+康美药业在股东回报方面领先，但是其他三个方面却都在平均水平以下，这与其特殊的股本结构和小盘股有着重要的联系。首先,翻看康美药业的年度报告就可以知道无论对整个资本市场还是对医药行业的上市公司而言，康美药业都属于小盘股;其次，康美药业属于典型的``家族企业''，公司的第一、二大股东关系密切，两者股权合计拥有超过\(78\%\)的公司股份。这两个原因使得尽管康美药业在其他方面表现平平,但是因为其没有一般上市公司的所有权和经营权分离所产生的矛盾，所以康美药业的股东可以享有较高的投资回报。
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}

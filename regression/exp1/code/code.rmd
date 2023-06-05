@@ -1,0 +1,23 @@
+---
+title: "R Notebook"
+output: html_document
+---
+
+```{r}
+setwd("C:\\Users\\zym\\Desktop\\regression\\exp1\\code")
+data <- read.table("./data.txt", header=TRUE)
+data["Fraction"] = data["Years"] / data["Age"]
+data = data[c(-10)]
+data = cbind(data[c(1,2)], data[c(10)], data[c(3:9)])
+library(ggplot2)
+layout(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3, byrow = TRUE))
+ggplot(data, aes(Age)) + geom_histogram(bins=30,colour="black",fill="white")
+ggplot(data, aes(Years)) + geom_histogram(bins=30,colour="black",fill="white")
+ggplot(data, aes(Fraction)) + geom_histogram(bins=30,colour="black",fill="white")
+ggplot(data, aes(Weight)) + geom_histogram(bins=30,colour="black",fill="white")
+ggplot(data, aes(Height)) + geom_histogram(bins=30,colour="black",fill="white")
+ggplot(data, aes(Chin)) + geom_histogram(bins=30,colour="black",fill="white")
+ggplot(data, aes(Forearm)) + geom_histogram(bins=30,colour="black",fill="white")
+ggplot(data, aes(Calf)) + geom_histogram(bins=30,colour="black",fill="white")
+ggplot(data, aes(Pulse)) + geom_histogram(bins=30,colour="black",fill="white")
+```

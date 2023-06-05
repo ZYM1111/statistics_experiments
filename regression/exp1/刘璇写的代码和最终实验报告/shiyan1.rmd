@@ -1,0 +1,234 @@
+---
+title: "R Notebook"
+output: html_document
+---
+
+```{r}
+#导入数据
+setwd("C:\\Users\\zym\\Desktop\\regression\\exp1\\code1")
+peru <- read.table("./peru.txt",header = T)
+peru[1:10,]
+```
+
+```{r}
+#修改数据
+peru$Diastol<-NULL
+peru$proportion<-peru$Years/peru$Age
+peru[1:10,]
+```
+
+```{r}
+#相关性
+attach(peru)
+cor(peru)
+plot(peru)
+```
+
+```{r}
+#线性回归
+LM1<-lm(Systol~Weight)
+LM1
+```
+
+```{r}
+#拟合散点图
+plot(Weight,Systol)
+abline(LM1)
+```
+
+```{r}
+#相关系数检验
+r<-cor(Weight,Systol)
+n<-length(Weight)
+tr<-r/sqrt((1-r^2)/(n-2))
+tr
+p<-2*(1-pt(tr,n-2))
+p
+```
+
+```{r}
+cor.test(Weight,Systol)
+```
+
+```{r}
+#t检验
+summary(LM1)
+```
+
+```{r}
+#失拟检验
+Full<-lm(Systol~as.factor(Weight))
+anova(LM1,Full)
+```
+
+```{r}
+#线性模型假设检验
+opar<-par(no.readonly = TRUE)
+par(mfrow=c(2,2))
+plot(LM1)
+par(opar)
+```
+
+```{r}
+plot(income ~ education, Prestige)
+with(Prestige, showLabels(education, income,
+     labels = rownames(Prestige), id.method=list("x", "y"), id.n=3))
+m <- lm(income ~ education, Prestige)
+plot(income ~ education, Prestige)
+abline(m)
+with(Prestige, showLabels(education, income,
+     labels=rownames(Prestige), id.method=abs(residuals(m)), id.n=4))
+```
+```{r}
+library(car)
+library(plotly)
+library(ggplot2)
+#正态性
+p = qqPlot(LM1,id=list(method="y", n=4, cex=1, col=carPalette()[1], location="lr"),main="Q-Q Plot")
+plot_ly(p)
+```
+
+```{r}
+library(car)
+states <- as.data.frame(state.x77[,c("Murder", "Population", "Illiteracy", "Income", "Frost")])
+fit <- lm(Murder ~ Population + Illiteracy + Income + Frost, data=states)
+qqPlot(fit, labels=row.names(states), id.method="identify", simulate=TRUE, main="Q-Q Plot")
+```
+
+
+
+#独立性
+durbinWatsonTest(LM1)
+
+#线性
+crPlots(LM1)
+
+#同方差性
+ncvTest(LM1)
+
+#综合检验
+library(gvlma)
+summary(gvlma(LM1))
+
+#离群点
+outlierTest(LM1)
+
+outlierTest(lm(Systol[2:39]~Weight[2:39]))
+
+#高杠杆值点
+hat.plot <- function(fit) {
+  p <- length(coefficients(fit))
+  n <- length(fitted(fit))
+  plot(hatvalues(fit), main="Index Plot of Hat Values")
+  abline(h=c(2,3)*p/n, col="red", lty=2)
+  identify(1:n, hatvalues(fit),names(hatvalues(fit)))
+}
+hat.plot(LM1)
+
+#强影响点
+cutoff <- 4/(nrow(peru)-length(LM1$coefficients)-2)
+plot(LM1, which=4, cook.levels=cutoff)
+abline(h=cutoff, lty=2, col="red")
+
+#异常值结合在同一张图
+influencePlot(LM5, id=list(method="identify"), main="Influence Plot",
+              sub="Circle size is proportional to Cook's distance")
+## influencePlot(LM1, id.method="identify", main="Influence Plot",
+##              sub="Circle size is proportional to Cook's distance")
+
+#删去异常值拟合
+Sl<-Systol[2:39]
+Wt<-Weight[2:39]
+newLM1<-lm(Sl~Wt)
+newLM1
+summary(newLM1)
+
+#模型预测
+new<-data.frame(Wt=60)
+new
+lm.conf<-predict(newLM1,new,interval="confidence",level = 0.95)
+lm.conf
+lm.pred<-predict(newLM1,new,interval="prediction",level = 0.95)
+lm.pred
+
+#相关性
+scatterplotMatrix(peru,spread=FALSE,smooth.args=list(lty=2),main="Scatter Plot Matrix")
+
+#全子集回归
+library(leaps)
+leaps<-regsubsets(Systol~Age+Years+Weight+Height+Chin+Forearm+Calf+Pulse+proportion,data=peru,nbest=2)
+plot(leaps,scale = "adjr2")
+
+LM7<-lm(Systol~Age+Years+Weight+Height+Chin+Forearm+proportion)
+LM7
+
+#逐步回归
+library(MASS)
+stepAIC(LM7,direction = "backward")
+
+LM5<-lm(Systol ~ Age + Years + Weight + Chin + proportion)
+LM5
+
+#线性模型假设检验
+opar<-par(no.readonly = TRUE)
+par(mfrow=c(2,2))
+plot(LM5)
+par(opar)
+
+#正态性
+qqPlot(LM5,id=list(method="identify",labels=row.names(peru)),simulate=TRUE,main="Q-Q Plot")
+## qqPlot(LM5,labels=row.names(peru),id.method="identify",simulate=TRUE,main="Q-Q Plot")
+
+#独立性
+durbinWatsonTest(LM5)
+
+#线性
+crPlots(LM5)
+
+#同方差性
+ncvTest(LM5)
+
+#综合检验
+summary(gvlma(LM5))
+
+#多重共线性
+vif(LM5)
+sqrt(vif(LM5))>2
+
+#离群点
+outlierTest(LM5)
+
+#高杠杆值点
+hat.plot(LM5)
+
+#强影响点
+cutoff <- 4/(nrow(peru)-length(LM1$coefficients)-2)
+plot(LM5, which=4, cook.levels=cutoff)
+abline(h=cutoff, lty=2, col="red")
+
+#变量添加图
+avPlots(LM5,ask=FALSE,id=list(method="identify"))
+## avPlots(LM5,ask=FALSE,id.method="identify")
+
+#异常值整合一幅图
+influencePlot(LM5, id=list(method="identify"), main="Influence Plot",
+              sub="Circle size is proportional to Cook's distance")
+
+#模型确定
+detach(peru)
+newperu<-peru[c(-1,-8,-38),]
+attach(newperu)
+nLM5<-lm(Systol ~ Age + Years + Weight + Chin + proportion)
+nLM5
+
+summary(nLM5)
+
+#模型预测
+new<-data.frame(Age=mean(Age),Years=mean(Years),Weight=mean(Weight),Chin=mean(Chin),proportion=mean(proportion))
+new
+lm.conf<-predict(nLM5,new,interval="confidence",level = 0.95)
+lm.conf
+lm.pred<-predict(nLM5,new,interval="prediction",level = 0.95)
+lm.pred
+
+detach(newperu)
